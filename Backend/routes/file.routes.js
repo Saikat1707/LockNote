@@ -10,6 +10,6 @@ router.patch("/update/fileName",fileController.updateFileName)
 router.patch("/update/fileContent",fileController.updateFileContent)
 
 router.delete("/delete",fileController.deleteFile)
-router.get("/details",fileController.getFileDetails)
+router.post("/details",fileController.getFileDetails)
 
 export default router

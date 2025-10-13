@@ -9,6 +9,6 @@ router.patch("/rename",folderController.renameFolderOfUser)
 router.delete("/delete",folderController.deleteFolderOfUser)
 
 
-router.get("/details",folderController.getAllTheFilesOfTheFolder)
+router.post("/details",folderController.getAllTheFilesOfTheFolder)
 
 export default router

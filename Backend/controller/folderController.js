@@ -1,7 +1,7 @@
 import {badResponse,goodResponse} from "../utils/response.js"
 import {getUserByKey} from "../DAO/user.dao.js"
 import { createFolder, deleteFolder, getFolderById, isExistedFolder, renameFolder } from "../DAO/folder.dao.js"
-
+import userModel from "../model/user.model.js"
 
 const createFolderOfUser = async (req,res)=>{
     try {
@@ -15,7 +15,9 @@ const createFolderOfUser = async (req,res)=>{
 
 
         const folderData = await createFolder(user._id,folderName)
-
+        if(!folderData) return badResponse(res,"error in creating folder")
+        user.folderList.push(folderData._id)
+        await user.save()
         return goodResponse(res,"Successfully folder created",folderData)
     } catch (error) {
         console.log("Error in creating folder 📂")
@@ -48,6 +50,14 @@ const deleteFolderOfUser = async(req,res)=>{
         if(!folderId) return badResponse(res,"All fields are required")
         const deletedFolder = await deleteFolder(folderId)
         if(!deletedFolder) return badResponse(res,"folder is not deleted")
+        if(deletedFolder.user){
+            const userId = deletedFolder.user
+            const user = await userModel.findById(userId)
+            if(user){
+                user.folderList.pull(deletedFolder._id)
+                await user.save()
+            }
+        }
         return goodResponse(res,"Successfully delete the folder")
     } catch (error) {
         console.log("Error while deleting the folder ",error.message)

@@ -1,7 +1,7 @@
 import fileModel from "../model/file.model.js";
 import {getUserByKey} from "../DAO/user.dao.js"
 import folderModel from "../model/folder.model.js"
-
+import userModel from "../model/user.model.js";
 
 export const isFileExistedOfUser = async (userKey, fileName) => {
   try {
