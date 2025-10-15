@@ -1,0 +1,31 @@
+.createRouteBox{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem;
+    background-color: #f7b3c2;
+    color: black;
+}
+.createRouteBox>p button{
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-weight: 700;
+    border-radius: 0 12px 12px 0;
+    margin-left: 0.2rem;
+}
+.createRouteBox>p input{
+    padding: 0.5rem;
+    color: black;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px 0 0 12px;
+    margin-left: 0.3rem;
+}
+.createRouteBox>p input:focus{
+    outline:1px solid black;
+}

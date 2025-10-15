@@ -1,0 +1,36 @@
+.FolderContainerMain{
+  max-width: 400px;
+  /* border: 2px solid white; */
+}
+.FolderHeadings{
+  padding: 0.5rem;
+  width: 400px;
+  background-color: #212121;
+  border-radius: 12px 0 0 12px;
+  border-bottom: 1px solid #474646;
+
+}
+.FolderHeadings p{
+  color: #FF0B55;
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+
+
+.FolderActionButtons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.FileFolderAction{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.FolderActionButtons button{
+  padding: 0.5rem;
+  outline: none;
+  border: 2px solid ;
+}

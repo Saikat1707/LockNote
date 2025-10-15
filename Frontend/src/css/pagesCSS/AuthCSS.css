@@ -1,0 +1,192 @@
+/* ===================== Hero Section ===================== */
+.HeroTexts {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.HeroWrapper{
+    padding: 1rem;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+}
+.HeroWrapper>p{
+    margin-top: 1rem;
+    text-align: left;
+}
+.HeroLogo {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HeroLogo h1 {
+  font-size: 5rem;
+  font-family: 'Crackman Front';
+}
+
+.HeroLogo h1 span {
+  color: #c014e6;
+}
+
+.HeroLogo iframe {
+  height: 5rem;
+}
+.HeroWorkFunctions{
+    text-align: left;
+}
+.HeroWorkFunctions ol{
+    list-style-type: square;
+}
+.HeroWorkFunctions li {
+  font-size: 0.9rem;
+  color: #EEEEEE;
+}
+
+.HeroWorkFunctions li > span {
+  color: #c014e6;
+  font-weight: 700;
+}
+
+/* ===================== Routing Inputs ===================== */
+.RoutingInputs {
+  height: 300px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1E1E1E;
+  /* padding: 1rem; */
+}
+
+.InputOptions {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login,
+.createRoute {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login {
+  background-color: #e61a50;
+  color: white;
+}
+
+.createRoute {
+  background-color: #f7b3c2;
+  color: #222;
+}
+
+.login:hover {
+  background-color: #c81444;
+  transform: translateY(-2px);
+}
+
+.createRoute:hover {
+  background-color: #f59fb1;
+  transform: translateY(2px);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px){
+    .HeroTexts{
+        flex-direction: column;
+    }
+    .HeroLogo{
+        width: 100%;
+        /* border: 2px solid red; */
+    }
+    .HeroWorkFunctions{
+        width: 100%;
+    }
+}
+@media (max-width: 992px) {
+  .HeroLogo h1 {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .HeroLogo h1 {
+    font-size: 4rem;
+
+  }
+  .HeroTexts {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+
+  }
+  .HeroWorkFunctions{
+    width: 100%;
+    text-align: left;
+  }
+  .RoutingInputs {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .InputOptions {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+  }
+  .login,
+  .createRoute {
+    height: 60px;
+    flex: 1;
+  }
+}
+@media (max-width: 640px){
+    .HeroLogo{
+        flex-direction: column;
+    }
+  .HeroLogo h1 {
+    font-size: 3rem;
+
+  }
+  .HeroLogo iframe{
+    height: 3rem;
+  }
+  .HeroTexts {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+
+  }
+  .HeroWorkFunctions{
+    width: 100%;
+    text-align: left;
+  }
+}
+@media (max-width: 480px) {
+  .HeroLogo h1 {
+    font-size: 2.2rem;
+  }
+  .HeroWorkFunctions li {
+    font-size: 0.8rem;
+  }
+  .login,
+  .createRoute {
+    font-size: 0.9rem;
+  }
+}

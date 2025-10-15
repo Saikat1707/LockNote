@@ -1,0 +1,55 @@
+/* Import Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  background-color: #141313;
+  color: #fff;
+  scroll-behavior: smooth;
+}
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background: #fff;
+  color: #000;
+}
+@font-face {
+  font-family: 'Crackman';
+  src: url('./assets/fonts/Crackman.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Crackman Front';
+  src: url('./assets/fonts/Crackman front.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Crackman Back';
+  src: url('./assets/fonts/Crackman back.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Add your custom styles below */

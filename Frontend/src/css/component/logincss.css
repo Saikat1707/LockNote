@@ -1,0 +1,30 @@
+.loginRouteBox{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem;
+    background-color: #e61a50;
+    color: #ffffff;
+}
+.loginRouteBox>p button{
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-weight: 700;
+    border-radius: 0 12px 12px 0;
+    margin-left: 0.2rem;
+}
+.loginRouteBox>p input{
+    padding: 0.5rem;
+    color: black;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px 0 0 12px;
+}
+.loginRouteBox>p input:focus{
+    outline:1px solid black;
+}

@@ -6,10 +6,10 @@ const createFileForUser = async(req,res)=>{
         const {userKey,fileName} = req.body
         if(!userKey || !fileName) return badResponse("All the fields are required")
         const isExist = await isFileExistedOfUser(userKey,fileName)
-        if(isExist) return badResponse(res,"File is already exist with the name")
+        if(isExist) return badResponse(res,"File is already exist with the same name")
         
         const file = await createFileOfUser(userKey,fileName)
-        if(!file) return badResponse(res,"File is not created")
+        if(!file) return badResponse(res,"Error in creating file . please try after some time")
         return goodResponse(res,"File created Successfully",file)
     } catch (error) {
         console.log("Error in creating file : ",error.message)
@@ -23,7 +23,7 @@ const createFileForFolder = async(req,res)=>{
         if(!folderId || !fileName) return badResponse(res,"All the fields are required")
         const isExist = await isFileExistedOfFolder(folderId,fileName)
         const file = await createFileOfFolder(folderId,fileName)
-        if(!file) return badResponse(res,"File is not created")
+        if(!file) return badResponse(res,"File is not created due to server issue . please try after some time ")
         return goodResponse(res,"File created Successfully",file)
     } catch (error) {
         console.log("Error in creating file : ",error.message)
@@ -37,7 +37,7 @@ const updateFileName = async (req,res)=>{
         if(!fileId || !fileName) return badResponse(res,"All fields are required")
 
         const file = await updateFileNameDao(fileId,fileName)
-        if(!file) return badResponse(res,"file not updated")
+        if(!file) return badResponse(res,"Error in server . please try after some time")
         return goodResponse(res,"Successfully update the file",file)
     } catch (error) {
         console.log("Error in updating file Name : ",error.message)
