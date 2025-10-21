@@ -23,7 +23,7 @@
 .FolderContainerMain {
   width: 100%;
   max-width: 400px;
-  min-height: 750px; /* ✅ min height for large devices */
+  /* min-height: 750px; */
   border-radius: 12px 0 0 12px;
   display: flex;
   flex-direction: column;
@@ -151,20 +151,32 @@
   flex-direction: column;
 }
 
-.fileShowingArea > p {
+.fileShowingArea .FolderFileHover {
   width: 100%;
   padding: 1rem;
+  display:  flex;
+  border-bottom: 1px solid rgb(52, 50, 50);
+}
+.FolderFileHover>p{
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+.FolderFileHover .FolderFileDeleteIcon{
+  font-size: 1.5rem;
+  opacity: 0;
+}
+.FolderFileHover:hover .FolderFileDeleteIcon{
+  opacity: 100;
+}
+.FolderFileHover{
   transition: all 0.3s ease-in-out;
-  border-bottom: 1px solid rgb(52, 50, 50);
 }
-
-.fileShowingArea > p:hover {
-  transform: scale(1.2);
+.FolderFileHover:hover{
+  transform: scale(1.1);
 }
-
 /* ================== TITLE + ACTION ================== */
 .FolderTitle {
   width: 100%;
@@ -207,6 +219,24 @@
   background-color: #ee0e0ea6;
   border-radius: 12px;
 }
+.FileFolderItem{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deleteIcon{
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
+}
+.FileFolderItem:hover .deleteIcon{
+  opacity: 100;
+}
+.folderDeleteIcon{
+  color: red;
+  font-size: 1.5rem;
+}
+
 /* ================== RESPONSIVE ================== */
 @media (max-width: 1200px) {
   .FolderContainerMain {

@@ -59,3 +59,50 @@ export const updateFileContent  = async (fileId,fileContent)=>{
         console.log(error)
     }
 }
+
+export const deleteFolder = async(folderId)=>{
+    try {
+        const deletedFolder = await axios.delete("/folder/delete",{data:{folderId}})
+        if(deletedFolder) return deletedFolder.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteFile = async(fileId)=>{
+    try {
+        console.log("deleted File ID : ",fileId)
+        const deletedFile = await axios.delete("/file/delete",{data:{fileId}})
+        console.log(deletedFile)
+        if(deletedFile) return deletedFile.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createFileForTheuser = async (userKey,fileName)=>{
+    try {
+        const fileData = await axios.post("/file/create/user",{userKey,fileName})
+        if(fileData) return fileData.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createFileForTheFolder = async (folderId,fileName)=>{
+    try {
+        const fileData = await axios.post("/file/create/folder",{folderId,fileName})
+        if(fileData) return fileData.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const addFolderToTheUser = async (userKey,folderName)=>{
+    try {
+        const folderData = await axios.post("/folder/create",{userKey,folderName})
+        if(folderData) return folderData.data
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -58,7 +58,7 @@ const deleteFolderOfUser = async(req,res)=>{
                 await user.save()
             }
         }
-        return goodResponse(res,"Successfully delete the folder")
+        return goodResponse(res,"Successfully delete the folder",deletedFolder)
     } catch (error) {
         console.log("Error while deleting the folder ",error.message)
         return badResponse(res,"Server error while deleting the folder ",error.message)
