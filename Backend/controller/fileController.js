@@ -22,6 +22,7 @@ const createFileForFolder = async(req,res)=>{
         const{folderId,fileName} = req.body
         if(!folderId || !fileName) return badResponse(res,"All the fields are required")
         const isExist = await isFileExistedOfFolder(folderId,fileName)
+        if(isExist) return badResponse(res,"File alreay exist in the folder");
         const file = await createFileOfFolder(folderId,fileName)
         if(!file) return badResponse(res,"File is not created due to server issue . please try after some time ")
         return goodResponse(res,"File created Successfully",file)

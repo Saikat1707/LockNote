@@ -1,7 +1,12 @@
 .DashBoardMain{
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    border: 2px solid red;
-    /* flex-direction: column; */
+    padding: 1rem;
+}
+
+@media (max-width: 1000px){
+    .DashBoardMain{
+        flex-direction: column;
+    }
 }

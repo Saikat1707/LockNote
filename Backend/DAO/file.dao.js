@@ -152,7 +152,9 @@ export const updateFileNameDao = async (fileId, newFileName) => {
 
 export const getFileById = async (fileId) => {
   try {
-    const file = await fileModel.findById(fileId);
+    const file = await fileModel.findById(fileId)
+    .populate("userId","userKey")
+    .populate("folderId","folderName")
     return file || null;
   } catch (error) {
     console.log("❌ Error while fetching file by ID DAO:", error.message);
