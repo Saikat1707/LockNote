@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { BiRightArrow } from "react-icons/bi";
 import { HiTemplate } from "react-icons/hi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../css/component/FolderStructure.css";
 import {
@@ -25,6 +25,7 @@ import { useAppContext } from "../ContextProvider";
 const FolderStructure = () => {
   const { userKey } = useParams();
   const { setFileId , isLogin } = useAppContext();
+  const navigate = useNavigate()
 
   const [folderData, setFolderData] = useState([]);
   const [fileData, setFileData] = useState([]);
@@ -56,6 +57,7 @@ const FolderStructure = () => {
 
   useEffect(() => {
     if(isLogin) fetchData();
+    else navigate('/')
   }, [fetchData]);
 
   const handleFolderClick = async (folderId) => {
