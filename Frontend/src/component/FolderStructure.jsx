@@ -287,7 +287,7 @@ const FolderStructure = () => {
                     <div className="fileShowingArea">
                       {loadingFolderId === folder._id ? (
                         <div className="inline-loader-wrapper">
-                          <p>Losading...</p>
+                          <p>Loading...</p>
                           <div className="loader small-loader"></div>
                         </div>
                       ) : folderFileList.length > 0 ? (
