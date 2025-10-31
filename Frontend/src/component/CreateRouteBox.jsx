@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../css/component/createRouteBox.css'
 import { userSignUp } from '../BackendData';
 import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify"
 const CreateRouteBox = () => {
   const [userKeySignUp, setUserKeySignUp] = useState()
   const [password, setPassword] = useState();
@@ -12,8 +13,10 @@ const CreateRouteBox = () => {
     try {
       const user = await userSignUp(userKeySignUp,password)
       navigation(`/${user.data.data.userKey}`)
+      toast.success("Successfully logged in")
     } catch (error) {
       console.log(error)
+      toast.error(error.message)
     }
   }
   return (

@@ -11,13 +11,15 @@ const Preview = () => {
   const [errorMessage, setErrorMessage] = useState();
   useEffect(() => {
     const fetchData = async () => {
+      console.log(fileId)
       if (!fileId){
         setErrorMessage("Open a File First")
         return
       }else setErrorMessage("")
       console.log("Fetching data for fileId:", fileId)
       const data = await fileDetails(fileId)
-      if (data?.data?.data) setFileData(data.data.data)
+      console.log("Here is the file ",data?.data)
+      if (data?.data) setFileData(data.data)
     }
     fetchData()
   }, [fileId])
@@ -27,6 +29,7 @@ const Preview = () => {
       setErrorMessage("Notes Can not be saved")
       return
     }
+    console.log(fileData)
     console.log(fileData?.fileContent)
     console.log(fileData?._id)
     try {

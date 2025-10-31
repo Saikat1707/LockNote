@@ -14,7 +14,7 @@ import "../css/component/FolderStructure.css";
 import {
   addFolderToTheUser,
   createFileForTheFolder,
-  createFileForTheuser,
+  createFileForTheUser,
   deleteFile,
   deleteFolder,
   getAllUserData,
@@ -35,12 +35,11 @@ const FolderStructure = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch all user data
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getAllUserData(userKey);
-      const data = response?.data?.data;
+      const data = response?.data;
       setFileData(data?.fileList || []);
       setFolderData(data?.folderList || []);
       setError("");
@@ -56,32 +55,33 @@ const FolderStructure = () => {
     fetchData();
   }, [fetchData]);
 
-  // Folder click handler
   const handleFolderClick = async (folderId) => {
-    setSelectedFolderId(folderId);
+    setSelectedFolderId((prev) => (prev === folderId ? null : folderId));
     setActiveFolder(folderId);
     setActiveFile(null);
     try {
       const response = await getFolderDetails(folderId);
-      const data = response?.data?.data;
-      if (data) setFolderFiles((prev) => ({ ...prev, [folderId]: data }));
+      const folderData =
+        response?.data?.data?.fileList ||
+        response?.data?.fileList ||
+        response?.data ||
+        [];
+      setFolderFiles((prev) => ({ ...prev, [folderId]: folderData }));
     } catch (err) {
       console.error(err);
       setError("Failed to fetch files for the folder");
     }
   };
 
-  // File click handler
   const handleFileClick = (fileId) => {
     setFileId(fileId);
     setActiveFile(fileId);
     setActiveFolder(null);
   };
 
-  // ===== FILE / FOLDER ACTIONS =====
   const addFileToUser = async (userKey, fileName) => {
     try {
-      const res = await createFileForTheuser(userKey, fileName);
+      const res = await createFileForTheUser(userKey, fileName);
       if (!res) return toast.error("File not created");
       toast.success(`${fileName} created successfully`);
       await fetchData();
@@ -94,12 +94,16 @@ const FolderStructure = () => {
     try {
       const res = await createFileForTheFolder(folderId, fileName);
       if (!res) return toast.error("File not created");
+      const newFile = res?.data?.data || res?.data;
+      setFileId(newFile?._id);
       toast.success(`${fileName} created successfully`);
-      await fetchData();
-
-      // Refresh this folder's files immediately
       const folderRes = await getFolderDetails(folderId);
-      setFolderFiles((prev) => ({ ...prev, [folderId]: folderRes?.data?.data }));
+      const updatedFiles =
+        folderRes?.data?.data?.fileList ||
+        folderRes?.data?.fileList ||
+        folderRes?.data ||
+        [];
+      setFolderFiles((prev) => ({ ...prev, [folderId]: updatedFiles }));
     } catch {
       toast.error(`${fileName} not created. Internal server error`);
     }
@@ -122,14 +126,11 @@ const FolderStructure = () => {
       if (!res) return toast.error("Folder not deleted");
       toast.success(`Folder deleted: ${res.data.folderName}`);
       await fetchData();
-
-      // Remove folder from folderFiles state
       setFolderFiles((prev) => {
         const copy = { ...prev };
         delete copy[folderId];
         return copy;
       });
-
       if (selectedFolderId === folderId) setSelectedFolderId(null);
     } catch {
       toast.error("Internal server error");
@@ -141,19 +142,22 @@ const FolderStructure = () => {
       const res = await deleteFile(fileId);
       if (!res) return toast.error("File not deleted");
       toast.success(`File deleted: ${res.data.fileName}`);
-      await fetchData();
-
-      // Refresh folder files if inside a folder
       if (folderId) {
         const folderRes = await getFolderDetails(folderId);
-        setFolderFiles((prev) => ({ ...prev, [folderId]: folderRes?.data?.data }));
+        const updatedFiles =
+          folderRes?.data?.data?.fileList ||
+          folderRes?.data?.fileList ||
+          folderRes?.data ||
+          [];
+        setFolderFiles((prev) => ({ ...prev, [folderId]: updatedFiles }));
+      } else {
+        await fetchData();
       }
     } catch {
       toast.error("Internal server error");
     }
   };
 
-  // ===== PROMPT HANDLERS =====
   const handleAddFileToUser = (e) => {
     e.stopPropagation();
     const name = prompt("Enter file name:")?.trim();
@@ -175,14 +179,11 @@ const FolderStructure = () => {
 
   if (loading) return <p className="FolderContainerMain">Loading...</p>;
 
-  // ===== UI =====
   return (
     <div className="FolderContainerMain">
       <div className="FolderHeadings">
         <p>FINDER</p>
       </div>
-
-      {/* ======= Action Buttons ======= */}
       <div className="FolderActionButtons">
         <div className="FileFolderAction">
           <button onClick={handleAddFileToUser}>
@@ -193,13 +194,10 @@ const FolderStructure = () => {
           </button>
         </div>
       </div>
-
-      {/* ======= Folder + File Display ======= */}
       {error ? (
         <p className="errorTag">{error}</p>
       ) : (
         <div className="FolderItems">
-          {/* Top-level files */}
           <div className="TopLevelFiles">
             {fileData.length === 0 ? (
               <p>No Files</p>
@@ -224,19 +222,14 @@ const FolderStructure = () => {
               ))
             )}
           </div>
-
           <p className="FolderSectionTitle">
             All Folders <HiTemplate />
           </p>
-
-          {/* Folders */}
           {folderData.length === 0 ? (
             <p>No Folders</p>
           ) : (
             folderData.map((folder) => {
-              const folderFileList =
-                folderFiles[folder._id]?.fileList || folderFiles[folder._id] || folder.fileList;
-
+              const folderFileList = folderFiles[folder._id] || [];
               return (
                 <div key={folder._id} className="FileFolderItem openingFolder">
                   <div
@@ -246,7 +239,6 @@ const FolderStructure = () => {
                     <p>
                       <AiFillFolderOpen className="FileFolderIcon" /> {folder.folderName}
                     </p>
-
                     {selectedFolderId === folder._id && (
                       <div className="specificFolderAction">
                         <button onClick={() => handleAddFileToFolder(folder._id)}>
@@ -262,11 +254,9 @@ const FolderStructure = () => {
                       </div>
                     )}
                   </div>
-
-                  {/* Folder Files */}
                   {selectedFolderId === folder._id && (
                     <div className="fileShowingArea">
-                      {folderFileList && folderFileList.length > 0 ? (
+                      {folderFileList.length > 0 ? (
                         folderFileList.map((file) => (
                           <div
                             key={file._id}
