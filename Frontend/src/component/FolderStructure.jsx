@@ -32,13 +32,14 @@ const FolderStructure = () => {
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [activeFolder, setActiveFolder] = useState(null);
   const [activeFile, setActiveFile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true); // show main loader only once
   const [folderLoading, setFolderLoading] = useState(null);
   const [error, setError] = useState("");
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (showLoader = false) => {
     try {
-      setLoading(true);
+      if (firstLoad || showLoader) setLoading(true);
       const response = await getAllUserData(userKey);
       const data = response?.data;
       setFileData(data?.fileList || []);
@@ -49,8 +50,9 @@ const FolderStructure = () => {
       setError("Failed to fetch folder data");
     } finally {
       setLoading(false);
+      if (firstLoad) setFirstLoad(false); // disable main loader after first fetch
     }
-  }, [userKey]);
+  }, [userKey, firstLoad]);
 
   useEffect(() => {
     fetchData();
@@ -91,7 +93,7 @@ const FolderStructure = () => {
       const res = await createFileForTheUser(userKey, fileName);
       if (!res) return toast.error("File not created");
       toast.success(`${fileName} created successfully`);
-      await fetchData();
+      await fetchData(true);
     } catch {
       toast.error(`${fileName} not created. Internal server error`);
     }
@@ -121,7 +123,7 @@ const FolderStructure = () => {
       const res = await addFolderToTheUser(userKey, folderName);
       if (!res) return toast.error("Folder not created");
       toast.success(`${folderName} created successfully`);
-      await fetchData();
+      await fetchData(true);
     } catch {
       toast.error("Internal server error");
     }
@@ -132,7 +134,7 @@ const FolderStructure = () => {
       const res = await deleteFolder(folderId);
       if (!res) return toast.error("Folder not deleted");
       toast.success(`Folder deleted: ${res.data.folderName}`);
-      await fetchData();
+      await fetchData(true);
       setFolderFiles((prev) => {
         const copy = { ...prev };
         delete copy[folderId];
@@ -158,7 +160,7 @@ const FolderStructure = () => {
           [];
         setFolderFiles((prev) => ({ ...prev, [folderId]: updatedFiles }));
       } else {
-        await fetchData();
+        await fetchData(true);
       }
     } catch {
       toast.error("Internal server error");
@@ -184,7 +186,8 @@ const FolderStructure = () => {
     addFileToFolder(folderId, name);
   };
 
-  if (loading)
+  // 👇 Show loader only once (first dashboard entry)
+  if (firstLoad)
     return (
       <div className="FolderContainerMain loaderWrapper">
         <div className="loader"></div>
@@ -197,6 +200,7 @@ const FolderStructure = () => {
       <div className="FolderHeadings">
         <p>FINDER</p>
       </div>
+
       <div className="FolderActionButtons">
         <div className="FileFolderAction">
           <button onClick={handleAddFileToUser}>
@@ -207,6 +211,7 @@ const FolderStructure = () => {
           </button>
         </div>
       </div>
+
       {error ? (
         <p className="errorTag">{error}</p>
       ) : (
@@ -235,15 +240,18 @@ const FolderStructure = () => {
               ))
             )}
           </div>
+
           <p className="FolderSectionTitle">
             All Folders <HiTemplate />
           </p>
+
           {folderData.length === 0 ? (
             <p>No Folders</p>
           ) : (
             folderData.map((folder) => {
               const folderFileList = folderFiles[folder._id] || [];
               const isLoading = folderLoading === folder._id;
+
               return (
                 <div key={folder._id} className="FileFolderItem openingFolder">
                   <div
@@ -268,6 +276,7 @@ const FolderStructure = () => {
                       </div>
                     )}
                   </div>
+
                   {selectedFolderId === folder._id && (
                     <div className="fileShowingArea">
                       {isLoading ? (
