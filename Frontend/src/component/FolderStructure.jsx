@@ -33,6 +33,7 @@ const FolderStructure = () => {
   const [activeFolder, setActiveFolder] = useState(null);
   const [activeFile, setActiveFile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [folderLoading, setFolderLoading] = useState(null);
   const [error, setError] = useState("");
 
   const fetchData = useCallback(async () => {
@@ -56,10 +57,14 @@ const FolderStructure = () => {
   }, [fetchData]);
 
   const handleFolderClick = async (folderId) => {
-    setSelectedFolderId((prev) => (prev === folderId ? null : folderId));
+    const isSame = selectedFolderId === folderId;
+    setSelectedFolderId(isSame ? null : folderId);
     setActiveFolder(folderId);
     setActiveFile(null);
+    if (isSame) return;
+
     try {
+      setFolderLoading(folderId);
       const response = await getFolderDetails(folderId);
       const folderData =
         response?.data?.data?.fileList ||
@@ -70,6 +75,8 @@ const FolderStructure = () => {
     } catch (err) {
       console.error(err);
       setError("Failed to fetch files for the folder");
+    } finally {
+      setFolderLoading(null);
     }
   };
 
@@ -177,7 +184,13 @@ const FolderStructure = () => {
     addFileToFolder(folderId, name);
   };
 
-  if (loading) return <p className="FolderContainerMain">Loading...</p>;
+  if (loading)
+    return (
+      <div className="FolderContainerMain loaderWrapper">
+        <div className="loader"></div>
+        <p>Loading workspace...</p>
+      </div>
+    );
 
   return (
     <div className="FolderContainerMain">
@@ -230,6 +243,7 @@ const FolderStructure = () => {
           ) : (
             folderData.map((folder) => {
               const folderFileList = folderFiles[folder._id] || [];
+              const isLoading = folderLoading === folder._id;
               return (
                 <div key={folder._id} className="FileFolderItem openingFolder">
                   <div
@@ -256,7 +270,9 @@ const FolderStructure = () => {
                   </div>
                   {selectedFolderId === folder._id && (
                     <div className="fileShowingArea">
-                      {folderFileList.length > 0 ? (
+                      {isLoading ? (
+                        <div className="miniLoader"></div>
+                      ) : folderFileList.length > 0 ? (
                         folderFileList.map((file) => (
                           <div
                             key={file._id}
