@@ -24,8 +24,8 @@ import { useAppContext } from "../ContextProvider";
 
 const FolderStructure = () => {
   const { userKey } = useParams();
-  const { setFileId , isLogin } = useAppContext();
-  const navigate = useNavigate()
+  const { setFileId, isLogin } = useAppContext();
+  const navigate = useNavigate();
 
   const [folderData, setFolderData] = useState([]);
   const [fileData, setFileData] = useState([]);
@@ -34,10 +34,10 @@ const FolderStructure = () => {
   const [activeFolder, setActiveFolder] = useState(null);
   const [activeFile, setActiveFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [firstLoad, setFirstLoad] = useState(true); // show main loader only once
-  const [folderLoading, setFolderLoading] = useState(null);
+  const [firstLoad, setFirstLoad] = useState(true);
   const [error, setError] = useState("");
 
+  // 🟣 Fetch user workspace data (files + folders)
   const fetchData = useCallback(async (showLoader = false) => {
     try {
       if (firstLoad || showLoader) setLoading(true);
@@ -51,7 +51,7 @@ const FolderStructure = () => {
       setError("Failed to fetch folder data");
     } finally {
       setLoading(false);
-      if (firstLoad) setFirstLoad(false); // disable main loader after first fetch
+      if (firstLoad) setFirstLoad(false);
     }
   }, [userKey, firstLoad]);
 
@@ -59,6 +59,7 @@ const FolderStructure = () => {
     fetchData();
   }, [fetchData]);
 
+  // 🟣 Folder click (loads files only once)
   const handleFolderClick = async (folderId) => {
     const isSame = selectedFolderId === folderId;
     setSelectedFolderId(isSame ? null : folderId);
@@ -66,8 +67,10 @@ const FolderStructure = () => {
     setActiveFile(null);
     if (isSame) return;
 
+    // If files already loaded once, don’t fetch again
+    if (folderFiles[folderId]) return;
+
     try {
-      setFolderLoading(folderId);
       const response = await getFolderDetails(folderId);
       const folderData =
         response?.data?.data?.fileList ||
@@ -78,8 +81,6 @@ const FolderStructure = () => {
     } catch (err) {
       console.error(err);
       setError("Failed to fetch files for the folder");
-    } finally {
-      setFolderLoading(null);
     }
   };
 
@@ -89,11 +90,11 @@ const FolderStructure = () => {
     setActiveFolder(null);
   };
 
+  // 🟣 Create / Delete handlers
   const addFileToUser = async (userKey, fileName) => {
     try {
       const res = await createFileForTheUser(userKey, fileName);
       if (!res) return toast.error("File not created");
-      // toast.success(`${fileName} created successfully`);
       await fetchData(true);
     } catch {
       toast.error(`${fileName} not created. Internal server error`);
@@ -106,7 +107,8 @@ const FolderStructure = () => {
       if (!res) return toast.error("File not created");
       const newFile = res?.data?.data || res?.data;
       setFileId(newFile?._id);
-      // toast.success(`${fileName} created successfully`);
+
+      // Refresh folder content in background (no loader)
       const folderRes = await getFolderDetails(folderId);
       const updatedFiles =
         folderRes?.data?.data?.fileList ||
@@ -123,7 +125,6 @@ const FolderStructure = () => {
     try {
       const res = await addFolderToTheUser(userKey, folderName);
       if (!res) return toast.error("Folder not created");
-      // toast.success(`${folderName} created successfully`);
       await fetchData(true);
     } catch {
       toast.error("Internal server error");
@@ -134,7 +135,6 @@ const FolderStructure = () => {
     try {
       const res = await deleteFolder(folderId);
       if (!res) return toast.error("Folder not deleted");
-      // toast.success(`Folder deleted: ${res.data.folderName}`);
       await fetchData(true);
       setFolderFiles((prev) => {
         const copy = { ...prev };
@@ -151,7 +151,7 @@ const FolderStructure = () => {
     try {
       const res = await deleteFile(fileId);
       if (!res) return toast.error("File not deleted");
-      // toast.success(`File deleted: ${res.data.fileName}`);
+
       if (folderId) {
         const folderRes = await getFolderDetails(folderId);
         const updatedFiles =
@@ -168,6 +168,7 @@ const FolderStructure = () => {
     }
   };
 
+  // 🟣 Add file/folder prompt wrappers
   const handleAddFileToUser = (e) => {
     e.stopPropagation();
     const name = prompt("Enter file name:")?.trim();
@@ -187,7 +188,7 @@ const FolderStructure = () => {
     addFileToFolder(folderId, name);
   };
 
-  // 👇 Show loader only once (first dashboard entry)
+  // 🟣 Show loader only for first dashboard entry
   if (firstLoad)
     return (
       <div className="FolderContainerMain loaderWrapper">
@@ -251,7 +252,6 @@ const FolderStructure = () => {
           ) : (
             folderData.map((folder) => {
               const folderFileList = folderFiles[folder._id] || [];
-              const isLoading = folderLoading === folder._id;
 
               return (
                 <div key={folder._id} className="FileFolderItem openingFolder">
@@ -280,9 +280,7 @@ const FolderStructure = () => {
 
                   {selectedFolderId === folder._id && (
                     <div className="fileShowingArea">
-                      {isLoading ? (
-                        <div className="miniLoader"></div>
-                      ) : folderFileList.length > 0 ? (
+                      {folderFileList.length > 0 ? (
                         folderFileList.map((file) => (
                           <div
                             key={file._id}

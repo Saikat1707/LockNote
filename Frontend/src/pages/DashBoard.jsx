@@ -12,7 +12,7 @@ const DashBoard = () => {
   console.log("Current location is : ",location.pathname)
   const {userKey} = useParams()
 
-  const {isLogin} = useAppContext()
+  const {isLogin,setIsLogin} = useAppContext()
   const navigate = useNavigate()
 
   useEffect(async () => {
@@ -32,7 +32,7 @@ const DashBoard = () => {
             toast.error("userKey or Password is incorrect")
             navigate("/")
           }
-    
+          setIsLogin(true)
         } catch (error) {
           console.log(error.message)
         }
