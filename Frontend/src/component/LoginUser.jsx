@@ -3,12 +3,15 @@ import "../css/component/logincss.css";
 import { userLogin } from '../BackendData';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { useAppContext } from '../ContextProvider';
 
 const LoginUser = () => {
   const [userKeyLogin, setUserKeyLogin] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const {setIsLogin} = useAppContext()
 
   const handleLogin = async () => {
     if (!userKeyLogin || !password) {
@@ -24,6 +27,7 @@ const LoginUser = () => {
       if (user) {
         console.log("Login successful:", user);
         toast.success("Successfully logged in");
+        setIsLogin(true)
         navigate(`/${userKeyLogin}`);
       } else {
         toast.error("Invalid key or password");

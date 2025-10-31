@@ -24,7 +24,7 @@ import { useAppContext } from "../ContextProvider";
 
 const FolderStructure = () => {
   const { userKey } = useParams();
-  const { setFileId } = useAppContext();
+  const { setFileId , isLogin } = useAppContext();
 
   const [folderData, setFolderData] = useState([]);
   const [fileData, setFileData] = useState([]);
@@ -55,7 +55,7 @@ const FolderStructure = () => {
   }, [userKey, firstLoad]);
 
   useEffect(() => {
-    fetchData();
+    if(isLogin) fetchData();
   }, [fetchData]);
 
   const handleFolderClick = async (folderId) => {
@@ -92,7 +92,7 @@ const FolderStructure = () => {
     try {
       const res = await createFileForTheUser(userKey, fileName);
       if (!res) return toast.error("File not created");
-      toast.success(`${fileName} created successfully`);
+      // toast.success(`${fileName} created successfully`);
       await fetchData(true);
     } catch {
       toast.error(`${fileName} not created. Internal server error`);
@@ -105,7 +105,7 @@ const FolderStructure = () => {
       if (!res) return toast.error("File not created");
       const newFile = res?.data?.data || res?.data;
       setFileId(newFile?._id);
-      toast.success(`${fileName} created successfully`);
+      // toast.success(`${fileName} created successfully`);
       const folderRes = await getFolderDetails(folderId);
       const updatedFiles =
         folderRes?.data?.data?.fileList ||
@@ -122,7 +122,7 @@ const FolderStructure = () => {
     try {
       const res = await addFolderToTheUser(userKey, folderName);
       if (!res) return toast.error("Folder not created");
-      toast.success(`${folderName} created successfully`);
+      // toast.success(`${folderName} created successfully`);
       await fetchData(true);
     } catch {
       toast.error("Internal server error");
@@ -133,7 +133,7 @@ const FolderStructure = () => {
     try {
       const res = await deleteFolder(folderId);
       if (!res) return toast.error("Folder not deleted");
-      toast.success(`Folder deleted: ${res.data.folderName}`);
+      // toast.success(`Folder deleted: ${res.data.folderName}`);
       await fetchData(true);
       setFolderFiles((prev) => {
         const copy = { ...prev };
@@ -150,7 +150,7 @@ const FolderStructure = () => {
     try {
       const res = await deleteFile(fileId);
       if (!res) return toast.error("File not deleted");
-      toast.success(`File deleted: ${res.data.fileName}`);
+      // toast.success(`File deleted: ${res.data.fileName}`);
       if (folderId) {
         const folderRes = await getFolderDetails(folderId);
         const updatedFiles =

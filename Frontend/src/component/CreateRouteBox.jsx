@@ -25,10 +25,10 @@ const CreateRouteBox = () => {
       setIsLogin(true)
       console.log(user.data)
       navigation(`/${user.data.userKey}`);
-      toast.success("Successfully logged in");
+      // toast.success("Successfully logged in");
     } catch (error) {
       console.log(error);
-      toast.error(error.message || "Signup failed");
+      // toast.error(error.message || "Signup failed");
     } finally {
       setLoading(false);
     }
