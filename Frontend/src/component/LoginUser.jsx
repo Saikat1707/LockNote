@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const LoginUser = () => {
   const [userKeyLogin, setUserKeyLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -15,6 +16,7 @@ const LoginUser = () => {
       return;
     }
 
+    setLoading(true);
     try {
       console.log("Attempting login with:", userKeyLogin, password);
       const user = await userLogin(userKeyLogin, password);
@@ -29,6 +31,8 @@ const LoginUser = () => {
     } catch (error) {
       console.error("Login error:", error);
       toast.error(error?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,14 +50,24 @@ const LoginUser = () => {
         </span>
         (or write directly in the address bar)
       </p>
-      <p>
+      <p className='passwordSection'>
         <input
           type="password"
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLogin}>Go</button>
+        <button 
+          onClick={handleLogin}
+          className={loading ? "loadingBtn" : ""}
+          disabled={loading}
+        >
+          {loading ? (
+            <span className="loader"></span>
+          ) : (
+            "Go"
+          )}
+        </button>
         (Enter your route password)
       </p>
     </div>
