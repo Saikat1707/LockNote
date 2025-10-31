@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "../css/component/Preview.css"
-import { useAppContext } from '../contextProvider'
+import { useAppContext } from '../ContextProvider'
 import { fileDetails, updateFileContent } from '../BackendData'
 import { toast } from 'react-toastify'
 
