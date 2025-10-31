@@ -222,6 +222,9 @@ const FolderStructure = () => {
         <p className="errorTag">{error}</p>
       ) : (
         <div className="FolderItems">
+          <p className="FolderSectionTitle">
+            All Files <HiTemplate />
+          </p>
           <div className="TopLevelFiles">
             {fileData.length === 0 ? (
               <p>No Files</p>
