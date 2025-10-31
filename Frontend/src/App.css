@@ -33,21 +33,21 @@ ul, ol {
 }
 @font-face {
   font-family: 'Crackman';
-  src: url('./assets/fonts/Crackman.otf') format('opentype');
+  src: url('../public/fonts/Crackman.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Crackman Front';
-  src: url('./assets/fonts/Crackman front.otf') format('opentype');
+  src: url('../public/fonts/Crackman\ Front.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Crackman Back';
-  src: url('./assets/fonts/Crackman back.otf') format('opentype');
+  src: url('../public/fonts/Crackman\ Back.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
