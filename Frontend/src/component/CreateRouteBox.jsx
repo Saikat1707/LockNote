@@ -3,12 +3,14 @@ import '../css/component/createRouteBox.css'
 import { userSignUp } from '../BackendData';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { useAppContext } from '../ContextProvider';
 
 const CreateRouteBox = () => {
   const [userKeySignUp, setUserKeySignUp] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigate();
+  const {setIsLogin , setFileId} = useAppContext()
 
   const handleSignUp = async () => {
     if (!userKeySignUp || !password) {
@@ -19,7 +21,10 @@ const CreateRouteBox = () => {
     setLoading(true);
     try {
       const user = await userSignUp(userKeySignUp, password);
-      navigation(`/${user.data.data.userKey}`);
+      setFileId("")
+      setIsLogin(true)
+      console.log(user.data)
+      navigation(`/${user.data.userKey}`);
       toast.success("Successfully logged in");
     } catch (error) {
       console.log(error);
