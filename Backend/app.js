@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"))
 app.use(cors({
-    origin: "https://lock-note-hazel.vercel.app/",
+    origin: "https://lock-note-hazel.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     credentials: true
 }))
