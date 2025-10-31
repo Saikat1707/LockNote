@@ -31,25 +31,28 @@ ul, ol {
   background: #fff;
   color: #000;
 }
+
+
 @font-face {
   font-family: 'Crackman';
-  src: url('../public/fonts/Crackman.otf') format('opentype');
+  src: url('/fonts/Crackman.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Crackman Front';
-  src: url('../public/fonts/Crackman\ Front.otf') format('opentype');
+  src: url('/fonts/Crackman Front.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Crackman Back';
-  src: url('../public/fonts/Crackman\ Back.otf') format('opentype');
+  src: url('/fonts/Crackman Back.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
+
 
 /* Add your custom styles below */

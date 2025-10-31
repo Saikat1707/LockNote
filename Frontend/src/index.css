@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Crackman';
+  src: url('/fonts/Crackman.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Crackman Front';
+  src: url('/fonts/Crackman Front.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Crackman Back';
+  src: url('/fonts/Crackman Back.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
