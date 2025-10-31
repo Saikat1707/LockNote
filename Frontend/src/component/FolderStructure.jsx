@@ -56,8 +56,7 @@ const FolderStructure = () => {
   }, [userKey, firstLoad]);
 
   useEffect(() => {
-    if(isLogin) fetchData();
-    else navigate('/')
+    fetchData();
   }, [fetchData]);
 
   const handleFolderClick = async (folderId) => {
