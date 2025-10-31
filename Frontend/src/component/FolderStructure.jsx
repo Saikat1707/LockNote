@@ -36,6 +36,7 @@ const FolderStructure = () => {
   const [loading, setLoading] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [error, setError] = useState("");
+  const [loadingFolderId, setLoadingFolderId] = useState(null); // <-- 1. ADDED STATE
 
   // 🟣 Fetch user workspace data (files + folders)
   const fetchData = useCallback(async (showLoader = false) => {
@@ -71,6 +72,7 @@ const FolderStructure = () => {
     if (folderFiles[folderId]) return;
 
     try {
+      setLoadingFolderId(folderId); // <-- 2. SET LOADER FOR THIS FOLDER
       const response = await getFolderDetails(folderId);
       const folderData =
         response?.data?.data?.fileList ||
@@ -81,6 +83,8 @@ const FolderStructure = () => {
     } catch (err) {
       console.error(err);
       setError("Failed to fetch files for the folder");
+    } finally {
+      setLoadingFolderId(null); // <-- 2. REMOVE LOADER
     }
   };
 
@@ -278,9 +282,14 @@ const FolderStructure = () => {
                     )}
                   </div>
 
+                  {/* 👇 [ 3. ] THIS IS THE CORRECTED JSX LOGIC 👇 */}
                   {selectedFolderId === folder._id && (
                     <div className="fileShowingArea">
-                      {folderFileList.length > 0 ? (
+                      {loadingFolderId === folder._id ? (
+                        <div className="inline-loader-wrapper">
+                          <div className="loader small-loader"></div>
+                        </div>
+                      ) : folderFileList.length > 0 ? (
                         folderFileList.map((file) => (
                           <div
                             key={file._id}
