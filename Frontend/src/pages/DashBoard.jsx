@@ -12,11 +12,12 @@ const DashBoard = () => {
   console.log("Current location is : ",location.pathname)
   const {userKey} = useParams()
 
-  const {isLogIn} = useAppContext()
+  const {isLogin} = useAppContext()
   const navigate = useNavigate()
 
   useEffect(async () => {
-    if(!isLogIn){
+    console.log(isLogin)
+    if(!isLogin){
       const password = prompt("Enter your password:");
 
       if (!password) {
@@ -26,7 +27,7 @@ const DashBoard = () => {
       }else{
         try {
           const data = await userLogin(userKey,password)
-          
+
           if(!data){
             toast.error("userKey or Password is incorrect")
             navigate("/")
