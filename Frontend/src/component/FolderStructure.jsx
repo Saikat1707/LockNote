@@ -20,7 +20,7 @@ import {
   getAllUserData,
   getFolderDetails,
 } from "../BackendData";
-import { useAppContext } from "../contextProvider";
+import { useAppContext } from "../ContextProvider";
 
 const FolderStructure = () => {
   const { userKey } = useParams();
